@@ -1,0 +1,16 @@
+.b-head-wrapper {
+    max-height: 30vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.b-head-nameplate {
+    float: left;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.6);
+    color: white;
+    margin: 0.5em;
+    padding: 0.5em;
+}

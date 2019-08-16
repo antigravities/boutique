@@ -1,68 +1,126 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Boutique
+Fast, beautiful, and flexible sites that showcase your [Steam curations](https://store.steampowered.com/about/curators/) with minimal configuration.
 
-## Available Scripts
+The project is in a work-in-progress state, but is mostly functional. I am looking to implement server-side rendering, share buttons, and better ad placement/refresh in the future.
 
-In the project directory, you can run:
+## Set up
+All you'll need to start is your curator ID (it's a string of numbers found in your curator's URL) and [Node.js](https://nodejs.com/). Once you have that set up, download this repository, copy config.json.example to config.json and replace `INSERT CURATOR ID HERE` with your curator's ID. Finish setup by opening a command prompt/terminal:
 
-### `npm start`
+```
+cd C:\[location you downloaded Boutique to]\boutique
+npm install
+```
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Generate
+To regenerate and deploy, run `npm run deploy`. The final files can be found in `build`.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+Note that when you have new curations to add to your site, you'll need to regenerate and re-deploy your site. Consider running the script as a cron job or scheduled task. If you have more than 500 linked reviews, initial generation may fail due to Steam rate limiting - wait an hour between attempts and try again.
 
-### `npm test`
+## (Pre)view locally
+`index.html` cannot be directly opened in a browser. You'll need to host the file from local Web server:
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+npm i -g serve
+serve -s build
+```
 
-### `npm run build`
+## Deploy
+To show your newly-generated site to the world, you'll need to host it on some sort of Web server. We have built-in quick deployment options, or you can set up manually.
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### [Amazon S3](https://s3.amazonaws.com)
+You'll want to set up a static Web site first using [this guide](https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html). Once you've set up a bucket and any other relevant settings, edit your config.json to match the following:
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+```json
+{
+    "curator": "INSERT CURATOR ID HERE",
+    "deploy": "aws:YOURBUCKETNAME:ACCESSKEYID:SECRETACCESSKEY"
+}
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Then, run `npm run deploy` to generate the site and deploy to S3.
 
-### `npm run eject`
+### [GitHub Pages](https://pages.github.com/)
+**If you are on Windows:** first install `windows-build-tools` using `npm i -g windows-build-tools`. Then, run `npm install` again.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+You'll need a [Personal Access Token](https://github.com/settings/tokens) (PAT) and repository with a root commit (i.e. has been committed to before) to deploy. Make sure that the repository is set up to build GitHub Pages from the master branch.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Edit your config.json to match the following:
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```json
+{
+    "curator": "INSERT CURATOR ID HERE",
+    "deploy": "github:USERNAME/REPO:PAT"
+}
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Then, run `npm run deploy` to generate the site and deploy to GitHub.
 
-## Learn More
+### Upload manually
+Upload all of the files in the "build" directory to your Web host.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Extras (optional)
+Enhance your site with these extra, but optional, features.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### [Disqus](https://disqus.com/)
+To set up Disqus, register on their Web site and get your Disqus subdomain. Edit your config.json to match the following:
 
-### Code Splitting
+```json
+{
+    "curator": "INSERT CURATOR ID HERE",
+    "disqus": "YOUR-DISQUS-SUBDOMAIN"
+}
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+Then, run `npm run deploy` to generate the site and deploy your changes.
 
-### Analyzing the Bundle Size
+**NB:** If you are using Disqus' free feature, you may not turn off their ads if you are also using Google AdSense.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+### [Google Analytics](https://analytics.google.com/)
+To set up Google Analytics, register on their Web site and obtain a tracking ID. Edit your config.json to match the following:
 
-### Making a Progressive Web App
+```json
+{
+    "curator": "INSERT CURATOR ID HERE",
+    "google_analytics": "UA_XXXXXXXX"
+}
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+Then, run `npm run deploy` to generate the site and deploy your changes.
 
-### Advanced Configuration
+### [Google AdSense](https://adsense.google.com/)
+Currently, one horizontal 728x90px ad is shown at the top of each page. Future Boutique updates may introduce other ad locations.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+To set up Google AdSense, register on their Web site and obtain an advertising ID. Edit your config.json to match the following:
 
-### Deployment
+```json
+{
+    "curator": "INSERT CURATOR ID HERE",
+    "adsense": "ADVERTISING-ID"
+}
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+Then, run `npm run deploy` to generate the site and deploy your changes.
 
-### `npm run build` fails to minify
+**NB**: You may need to create a file in your document root called `ads.txt` in order to bypass the automated verification. Also, if you are using Disqus' free feature, you may not turn off their ads if you are also using Google AdSense.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## Hacking
+Boutique is a [React](https://github.com/facebook/react) app built on top of [create-react-app](https://github.com/facebook/create-react-app). A local Web server with hot reloading can be started with `npm start`.
+
+## License
+```
+Boutique
+Copyright (C) 2019 Alexandra Frock/Cutie Café.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+```
