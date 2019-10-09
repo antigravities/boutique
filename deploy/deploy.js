@@ -52,6 +52,10 @@ const consts = {
       if( meta.lists.indexOf($(t).attr("href").split("/")[6]) < 0 ) meta.lists.push($(t).attr("href").split("/")[6]);
     });
 
+    $ = cheerio.load(await request("https://store.steampowered.com/curator/" + config.curator + "/about/"));
+
+    meta.description = $(".tagline").text().trim().replace("“", "").replace("”", "");
+
     meta.gtag = config.google_analytics || "";
     meta.disqus = config.disqus || "";
     meta.adsense = config.adsense || "";
@@ -185,6 +189,6 @@ const consts = {
 
   console.log("Generation complete.");
 
-  await require("./build-content")(meta);
-  await require("./deploy-content")(config);
+  //await require("./build-content")(meta);
+  //await require("./deploy-content")(config);
 })();

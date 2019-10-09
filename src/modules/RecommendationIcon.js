@@ -12,7 +12,9 @@ class ModuleRecommendationIcon extends React.Component {
   constructor(props){
     super(props);
 
-    this.state = { icon: rec[props.rec], text: props.text }
+    let irec =  props.rec === undefined ? 0 : props.rec;
+
+    this.state = { icon: rec[irec], text: props.text }
   }
 
   render(){

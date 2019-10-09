@@ -2,11 +2,13 @@ import React from 'react';
 import ModuleGoogleAnalyticsTag from './GoogleAnalyticsTag';
 import ModuleIcon from './Icon';
 
+import * as meta from '../../generated/meta.json';
+
 class ModuleFooter extends React.Component {
   constructor(props){
     super(props);
 
-    this.state = { meta: props.meta }
+    this.state = { meta: meta.default }
   }
 
   render(){

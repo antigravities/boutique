@@ -1,8 +1,7 @@
 import React from 'react';
 import Carousel from 'react-bootstrap/Carousel';
-import '../styles/carousel.css';
 
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import ModuleRecommendationIcon from './RecommendationIcon';
 
 class ModuleCarousel extends React.Component {
@@ -14,7 +13,7 @@ class ModuleCarousel extends React.Component {
 
     for(let app in props.apps){
       let long = "";
-      if( props.apps[app].long ) long=<Link to={"review/" + props.apps[app].id}>Read more...</Link>;
+      if( props.apps[app].long ) long=<Link href={"review/" + props.apps[app].id}>Read more...</Link>;
 
       apps.push(
         <Carousel.Item key={props.apps[app].id}>
@@ -35,8 +34,6 @@ class ModuleCarousel extends React.Component {
   }
 
   render(){
-    console.log(this.state);
-    
     return (
       <Carousel className="b-carousel">
         {this.state.apps}

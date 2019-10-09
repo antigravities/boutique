@@ -1,3 +1,49 @@
 .b-brand {
     padding: 1em 0 1em 0;
 }
+
+.b-carousel-caption {
+    width: 100%;
+    padding: 20px 15% 20px 15%;
+    margin: 0 0 20px 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 0;
+}
+
+@media all and (min-width: --breakpoint-sm){
+    .b-carousel.carousel, .b-carousel.carousel > .carousel-inner > .carousel-item {
+        max-height: calc(50vh - 20px);
+    }
+}
+
+@media all and (max-width: --breakpoint-sm){
+    .b-carousel.carousel, .b-carousel.carousel > .carousel-inner > .carousel-item {
+        height: calc(75vh - 20px);
+    }
+}
+
+.b-list-col {
+    word-break: break-word;
+}
+
+.b-head-wrapper {
+    max-height: 30vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.b-head-nameplate {
+    float: left;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.6);
+    color: white;
+    margin: 0.5em;
+    padding: 0.5em;
+}
+
+.b-short, .b-short > img {
+    height: 5rem;
+}

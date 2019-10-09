@@ -24,6 +24,7 @@ yarn-error.log*
 
 # boutique
 /generated
-/public/generated
+/static/generated
 /deploytmp
 config.json
+.next

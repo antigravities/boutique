@@ -1,5 +1,4 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { Container } from 'react-bootstrap';
 
@@ -39,11 +38,7 @@ class Boutique extends React.Component {
 
     //document.querySelector("head").removeChild(document.querySelector("#icon")); // i dunno either
     
-    let fav = document.createElement("link");
-    fav.rel = "shortcut icon";
-    fav.href = this.state.meta.avatar;
-    
-    document.querySelector("head").appendChild(fav);
+
   }
 
   render(){

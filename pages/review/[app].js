@@ -1,29 +1,42 @@
 import React from 'react';
 
-import PageNotFound from './NotFound.js';
-import ModuleDisqus from '../modules/Comments.js';
+import { Container } from 'react-bootstrap';
 
-import '../styles/review.css';
-import ModuleRecommendationIcon from '../modules/RecommendationIcon.js';
+import PageNotFound from '../NotFound.js';
+import ModuleDisqus from '../../src/modules/Comments.js';
+import ModuleHeader from '../../src/modules/Header.js';
+import ModuleFooter from '../../src/modules/Footer.js';
+
+import ModuleRecommendationIcon from '../../src/modules/RecommendationIcon';
+
+import * as Router from 'next/router';
+import * as meta from '../../generated/meta.json';
 
 class PageReview extends React.Component {
   constructor(props){
     super(props);
 
     this.state = {
-      item: null,
+      item: props.item || null,
       notfound: false,
-      meta: props.meta
+      meta: meta.default,
+      rid: props.router.query.app
     };
   }
 
-  async componentDidMount(){
-    try {
-      let json = await (await fetch("/generated/review/" + this.props.match.params.id + ".json")).json();
-      this.setState({item: json});
-    } catch(e){
-      this.setState({ item: true, notfound: true });
-    }
+  //async componentDidMount(){
+  //  try {
+  //    let json = await (await fetch("/static/generated/review/" + this.state.rid + ".json")).json();
+  //    this.setState({item: json});
+  //  } catch(e){
+  //   this.setState({ item: true, notfound: true });
+  //  }
+  //}
+
+  // https://spectrum.chat/next-js/general/how-can-i-fetch-data-from-local-json-files~c814e22e-40bd-4c0c-af9c-8094148228da
+  static async getInitialProps(context){
+    if( context.req ) return { item: await import("../../generated/review/" + context.query.app + ".json") };
+    else return window.__NEXT_DATA__.props.pageProps.item;
   }
   
   render(){
@@ -40,9 +53,11 @@ class PageReview extends React.Component {
     let comments = this.state.meta.disqus && this.state.meta.disqus.length > 0 ? <div><hr /><ModuleDisqus dqtag={this.state.meta.disqus} /></div> : "";
 
     return (
-      <div>
-        <div class="b-head-wrapper">
-          <div class="b-head-nameplate">
+      <Container>
+        <ModuleHeader pageTitle={this.state.item.title} />
+
+        <div className="b-head-wrapper">
+          <div className="b-head-nameplate">
             <h1>{this.state.item.title}</h1>
             <span>By <b dangerouslySetInnerHTML={{__html: this.state.item.author}}></b> &middot; {date}</span>
           </div>
@@ -64,9 +79,11 @@ class PageReview extends React.Component {
         <a href={"https://store.steampowered.com/app/" + this.state.item.id + "?curator_clanid=" + this.state.meta.id} target="_blank">Buy {this.state.item.title} on Steam</a>
 
         {comments}
-      </div>
+
+        <ModuleFooter />
+      </Container>
     );
   }
 }
 
-export default PageReview;
+export default Router.withRouter(PageReview);

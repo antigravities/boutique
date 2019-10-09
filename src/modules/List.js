@@ -1,31 +1,29 @@
 import React from 'react';
 
-import '../styles/list.css'; //
-
-import {Col, Row,Container} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Col, Row, Container } from 'react-bootstrap';
+import Link from 'next/link';
 import ModuleRecommendationIcon from './RecommendationIcon';
 
 class ModuleList extends React.Component {
   constructor(props){
     super(props);
 
-    this.state = { listID: props.list, list: null };
+    this.state = { listID: props.listID, list: props.list || null };
   }
 
   async componentDidMount(){
-    this.setState({ list: await (await fetch("/generated/list/" + this.state.listID + ".json")).json(), ready: true});
+    this.setState({ list: await (await fetch("/static/generated/list/" + this.state.listID + ".json")).json(), ready: true});
   }
-
+  
   render(){
     if( ! this.state.list ) return false;
 
-    let apps = this.state.list.apps.slice(0,3).map(i => <ModuleListItem app={i} />);
+    let apps = this.state.list.apps.slice(0,3).map(i => <ModuleListItem app={i} key={"app-" + i.id} />);
 
     return (
       <div>
         <hr />
-        <h2><Link to={"/list/" + this.state.listID}>{this.state.list.title}</Link></h2>
+        <h2><Link href={"/list/" + this.state.listID}><a>{this.state.list.title}</a></Link></h2>
         <h4>{this.state.list.description}</h4>
         <Container>
           <Row>
@@ -45,7 +43,7 @@ class ModuleListItem extends React.Component {
   }
 
   render(){
-    let headerLink = (this.state.app.long ? <Link to={"/review/" + this.state.app.id}><ModuleRecommendationIcon rec={this.state.app.recommended}/> {this.state.app.title}</Link> : <span><ModuleRecommendationIcon rec={this.state.app.recommended}/> {this.state.app.title}</span>);
+    let headerLink = (this.state.app.long ? <Link href={"/review/" + this.state.app.id}><a><ModuleRecommendationIcon rec={this.state.app.recommended}/> {this.state.app.title}</a></Link> : <span><ModuleRecommendationIcon rec={this.state.app.recommended}/> {this.state.app.title}</span>);
 
     return (
       <Col sm className="b-list-col">
